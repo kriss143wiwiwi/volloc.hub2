@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <section id="navigation">
+            <a href="index.html">Главная</a>
+            <a href="event.html">Мероприятия</a>
+            <a href="profile.html">Профиль</a>
+            <a href="register.html">Регистрация</a>
+            <img id="topAvatar" src="default-avatar.png" alt="Профиль">
+            
+        </section> 
+    </nav>
+
+    <h2 id="welcome">Здравствуйте!</h2>
+
+    <div id="profileStatus">
+        Пока анкета пустая. 
+    </div>
+
+    <button id="fillProfile">Заполнить анкету</button>
+    
+    <button id="logout">Выйти</button>
+
+    <script>
+        const currentUserEmail = localStorage.getItem("currentUser");
+        if (!currentUserEmail) {
+            window.location.href = "login.html";
+        }
+
+        let storedUser = JSON.parse(localStorage.getItem(currentUserEmail)) || {};
+        if (!storedUser.profile) storedUser.profile = {};
+
+        const user = storedUser;
+
+        // Приветствие
+        const welcome = document.getElementById("welcome");
+        welcome.textContent = user.profile.name ? 
+            `Здравствуйте, ${user.profile.name}!` : 
+            "Здравствуйте, волонтёр!";
+
+        // Функция выхода
+        document.getElementById("logout").addEventListener("click", () => {
+            localStorage.removeItem("currentUser");
+            window.location.href = "login.html";
+        });
+
+        // Кнопка заполнить анкету
+        document.getElementById("fillProfile").addEventListener("click", () => {
+            window.location.href = "fill-profile.html";
+        });
+
+        // Функция отображения анкеты
+        function updateProfileStatus() {
+            const container = document.getElementById("profileStatus");
+
+            if (user.profile && user.profile.name) {
+                container.innerHTML = `
+                    <div class="profile-card">
+                         <h4>Ваша анкета</h4>
+
+                        ${user.profile.avatar 
+                            ? `<img src="${user.profile.avatar}" class="profile-avatar">`
+                            : `<div class="profile-avatar placeholder"></div>`}
+
+                       
+                        <p><strong>Имя:</strong> ${user.profile.name}</p>
+                        <p><strong>Возраст:</strong> ${user.profile.age}</p>
+                        <p><strong>Навыки:</strong> ${user.profile.skills}</p>
+                        <p><strong>Описание опыта:</strong> ${user.profile.description}</p>
+                    </div>`;
+            } else {
+                container.textContent = "Пока анкета пуста.";
+            }
+        }
+
+        // Вызываем при загрузке страницы
+        updateProfileStatus();
+        
+        const topAvatar = document.getElementById("topAvatar");
+
+        if (topAvatar) {
+            const currentUserEmail = localStorage.getItem("currentUser");
+
+            if (currentUserEmail) {
+                const storedUser = JSON.parse(localStorage.getItem(currentUserEmail));
+
+                if (storedUser?.profile?.avatar) {
+                    topAvatar.src = storedUser.profile.avatar;
+                }
+            }
+
+            topAvatar.addEventListener("click", () => {
+                window.location.href = "profile.html";
+            });
+        }
+
+
+    
+    </script>
+</body>
+</html>

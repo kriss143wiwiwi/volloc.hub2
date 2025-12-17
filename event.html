@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <header>
+        <meta charset="UTF-8">
+        <title>Мероприятия</title>
+        <link rel="stylesheet" href="style.css">
+    </header>
+
+
+    <body>
+        <nav>
+            <section id="navigation">
+                <a href="index.html">Главная</a>
+                <a href="event.html">Мероприятия</a>
+                <a href="profile.html">Профиль</a>
+                <a href="register.html">Регистрация</a>
+                <img id="topAvatar" src="default-avatar.png" alt="Профиль">
+            </section> 
+        </nav>
+        <h2>Ближайшие мероприятия</h2>
+
+        <div class="events-container">
+
+            <div class="event-card">
+                <h3>Фестиваль "Персиковый источник"</h3>
+                <img id="peach" src="peach.jpg" >
+                <p><strong>Требуется: </strong>Помощь за сценой и навигация гостей</p>
+                <p><strong>Дата:</strong> 8 ноября</p>
+                <p><strong>Город:</strong> Москва</p>
+                <button >Записаться</button>
+            </div>
+
+            
+        </div>
+    </body>
+    <footer>
+
+
+
+    </footer>
+
+
+    <script>
+        const topAvatar = document.getElementById("topAvatar");
+
+        if (topAvatar) {
+            const currentUserEmail = localStorage.getItem("currentUser");
+
+            if (currentUserEmail) {
+                const storedUser = JSON.parse(localStorage.getItem(currentUserEmail));
+
+                if (storedUser?.profile?.avatar) {
+                    topAvatar.src = storedUser.profile.avatar;
+                }
+            }
+
+            topAvatar.addEventListener("click", () => {
+                window.location.href = "profile.html";
+            });
+        }
+
+
+    </script>
+
+
+</html>

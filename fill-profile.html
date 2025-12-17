@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Заполнить анкету</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <section id="navigation">
+            <a href="index.html">Главная</a>
+            <a href="event.html">Мероприятия</a>
+            <a href="profile.html">Профиль</a>
+            <a href="register.html">Регистрация</a>
+            <img id="topAvatar" src="default-avatar.png" alt="Профиль">
+        </section> 
+    </nav>
+
+    <h2>Заполнить анкету</h2>
+
+    <form id="profileForm">
+        <input type="text" id="name" placeholder="Ваше имя" required>
+        <input type="number" id="age" placeholder="Возраст" required>
+        <input type="text" id="skills" placeholder="Навыки" required>
+        <textarea id="description" placeholder="Краткое описание опыта"></textarea>
+
+        <label>Фотография профиля:</label>
+        <input type="file" id="photoInput" accept="image/*"><br><br>
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <script>
+        // Проверка текущего пользователя
+        const currentUserEmail = localStorage.getItem("currentUser");
+        if (!currentUserEmail) {
+            window.location.href = "login.html";
+        }
+
+        // Получаем данные пользователя
+        let storedUser = JSON.parse(localStorage.getItem(currentUserEmail)) || {};
+        if (!storedUser.profile) storedUser.profile = {};
+
+        // Заполняем поля, если данные уже есть
+        document.getElementById("name").value = storedUser.profile.name || "";
+        document.getElementById("age").value = storedUser.profile.age || "";
+        document.getElementById("skills").value = storedUser.profile.skills || "";
+        document.getElementById("description").value = storedUser.profile.description || "";
+
+        // Обработчик формы
+        document.getElementById("profileForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const skills = document.getElementById("skills").value;
+            const description = document.getElementById("description").value;
+
+            const avatarInput = document.getElementById("photoInput");
+            const avatarFile = avatarInput.files[0];
+
+            function saveAndExit(avatarBase64 = null) {
+                storedUser.profile = {
+                    name,
+                    age,
+                    skills,
+                    description,
+                    avatar: avatarBase64 || storedUser.profile.avatar || null
+                };
+                localStorage.setItem(currentUserEmail, JSON.stringify(storedUser));
+                alert("Анкета сохранена!");
+                window.location.href = "profile.html";
+            }
+
+            if (!avatarFile) {
+                saveAndExit();
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function() {
+                saveAndExit(reader.result);
+            };
+            reader.readAsDataURL(avatarFile);
+        });
+        
+        const topAvatar = document.getElementById("topAvatar");
+
+        if (topAvatar) {
+            const currentUserEmail = localStorage.getItem("currentUser");
+
+            if (currentUserEmail) {
+                const storedUser = JSON.parse(localStorage.getItem(currentUserEmail));
+
+                if (storedUser?.profile?.avatar) {
+                    topAvatar.src = storedUser.profile.avatar;
+                }
+            }
+
+            topAvatar.addEventListener("click", () => {
+                window.location.href = "profile.html";
+            });
+        }
+
+    </script>
+
+</body>
+</html>

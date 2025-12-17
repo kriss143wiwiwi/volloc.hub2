@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <nav>
+        <section id="navigation">
+            <a href="index.html">Главная</a>
+            <a href="event.html">Мероприятия</a>
+            <a href="profile.html">Профиль</a>
+            <a href="register.html">Регистрация</a>
+            <img id="topAvatar" src="default-avatar.png" alt="Профиль">
+        </section> 
+    </nav>
+
+<h2>Вход</h2>
+
+<form id="loginForm">
+    <input type="email" id="email" placeholder="Введите email" required>
+    <input type="password" id="password" placeholder="Введите пароль" required>
+    <button type="submit">Войти</button>
+    
+</form>
+
+
+<p>Нет аккаунта?</p>
+<a href="register.html"><button>Зарегестрироваться</button></a>
+
+
+<p id="message" style="color:red;"></p>
+
+<script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const pass = document.getElementById("password").value;
+
+        const storedUser = localStorage.getItem(email);
+
+        if (!storedUser) {
+            message.textContent = "Такого пользователя не существует!";
+            return;
+        }
+
+        const user = JSON.parse(storedUser);
+
+        if (user.password !== pass) {
+            message.textContent = "Неверный пароль!";
+            return;
+        }
+
+        // Авторизация
+        localStorage.setItem("currentUser", email);
+
+        message.style.color = "green";
+        message.textContent = "Успешный вход!";
+
+        setTimeout(() => {
+            window.location.href = "profile.html";
+        }, 1000);
+    });
+    
+        const topAvatar = document.getElementById("topAvatar");
+
+        if (topAvatar) {
+            const currentUserEmail = localStorage.getItem("currentUser");
+
+            if (currentUserEmail) {
+                const storedUser = JSON.parse(localStorage.getItem(currentUserEmail));
+
+                if (storedUser?.profile?.avatar) {
+                    topAvatar.src = storedUser.profile.avatar;
+                }
+            }
+
+            topAvatar.addEventListener("click", () => {
+                window.location.href = "profile.html";
+            });
+        }
+
+
+    
+</script>
+
+</body>
+</html>

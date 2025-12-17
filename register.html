@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <nav>
+        <section id="navigation">
+            <a href="index.html">Главная</a>
+            <a href="event.html">Мероприятия</a>
+            <a href="profile.html">Профиль</a>
+            <a href="register.html">Регистрация</a>
+            <img id="topAvatar" src="default-avatar.png" alt="Профиль">
+        </section> 
+    </nav>
+
+<h2>Регистрация</h2>
+
+<form id="registerForm">
+    <input type="email" id="email" placeholder="Введите email" required>
+    <input type="password" id="password" placeholder="Введите пароль" required>
+    <input type="password" id="confirm" placeholder="Повторите пароль" required>
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+<p id="message" style="color:red;"></p>
+
+<script>
+    const form = document.getElementById("registerForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const pass = document.getElementById("password").value;
+        const confirm = document.getElementById("confirm").value;
+
+        // Проверка совпадения паролей
+        if (pass !== confirm) {
+            message.textContent = "Пароли не совпадают!";
+            return;
+        }
+
+        // Проверяем, не существует ли пользователь
+        if (localStorage.getItem(email)) {
+            message.textContent = "Пользователь с таким email уже существует!";
+            return;
+        }
+
+        // Сохраняем данные
+        const user = {
+            email: email,
+            password: pass,
+            profile: {} // Здесь позже будет анкета волонтёра
+        };
+
+        localStorage.setItem(email, JSON.stringify(user));
+        localStorage.setItem("currentUser", email); // Авторизация после регистрации
+
+        message.style.color = "green";
+        message.textContent = "Регистрация успешна!";
+
+        setTimeout(() => {
+            window.location.href = "profile.html";
+        }, 1000);
+    });
+    
+        const topAvatar = document.getElementById("topAvatar");
+
+        if (topAvatar) {
+            const currentUserEmail = localStorage.getItem("currentUser");
+
+            if (currentUserEmail) {
+                const storedUser = JSON.parse(localStorage.getItem(currentUserEmail));
+
+                if (storedUser?.profile?.avatar) {
+                    topAvatar.src = storedUser.profile.avatar;
+                }
+            }
+
+            topAvatar.addEventListener("click", () => {
+                window.location.href = "profile.html";
+            });
+        }
+
+
+    
+</script> 
+
+<a href="login.html"><button>Войти</button></a>
+
+
+
+</body>
+</html>

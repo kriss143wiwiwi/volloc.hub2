@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Volloc.Hub</title>
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+    <body>
+        <header>
+             <nav>
+                <section id="navigation">
+                    <a href="index.html">Главная</a>
+                    <a href="event.html">Мероприятия</a>
+                    <a href="profile.html">Профиль</a>
+                    <a href="register.html">Регистрация</a>
+                    <img id="topAvatar" src="default-avatar.png" alt="Профиль">
+                </section> 
+             </nav>
+        </header>
+        <main class="main-page">
+
+            <section class="hero">
+                <h1>Volloc.Hub</h1>
+                <p class="hero-text">
+                    Платформа для волонтеров и организаторов. Для тех, кто хочет создавать и помогать, здесь волонтёры могут находить мероприятия, участвовать в добрых делах
+                    и делиться своим опытом.
+                </p>
+
+                <button class="main-button" onclick="window.location.href='event.html'">
+                    Перейти к мероприятиям
+                </button>
+                <button class="secondary-button" onclick="window.location.href='register.html'">
+                    Стать волонтёром
+                </button>
+
+            </section>
+
+            
+
+            <section class="values">
+                <h2>Наши ценности</h2>
+
+                <div class="values-grid">
+                    <div class="value-card">
+                        <h3>🤝 Взаимопомощь</h3>
+                        <p>Мы верим, что вместе можно сделать больше.</p>
+                    </div>
+
+                    <div class="value-card">
+                        <h3>💠Дальше - больше</h3>
+                        <p>Каждый день мы совершенствуем наш сайт для удобства пользователей</p>
+                    </div>
+
+                    <div class="value-card">
+                        <h3>✨ Открытость</h3>
+                        <p>Каждый может стать частью сообщества.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+
+        <footer>
+            <p>© 2025 Volloc.Hub. С любовью к волонтёрам 💛</p>
+        </footer>
+    </body>
+
+
+
+
+
+    <script>
+        const topAvatar = document.getElementById("topAvatar");
+
+        if (topAvatar) {
+            const currentUserEmail = localStorage.getItem("currentUser");
+
+            if (currentUserEmail) {
+                const storedUser = JSON.parse(localStorage.getItem(currentUserEmail));
+
+                if (storedUser?.profile?.avatar) {
+                    topAvatar.src = storedUser.profile.avatar;
+                }
+            }
+
+            topAvatar.addEventListener("click", () => {
+                window.location.href = "profile.html";
+            });
+        }
+
+
+    </script>    
+</html>
